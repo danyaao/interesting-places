@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:interesting_places/component_library/component_library.dart';
 
@@ -6,10 +8,12 @@ class PhotoPicker extends StatelessWidget {
     super.key,
     required this.add,
     required this.delete,
+    required this.images,
   });
 
   final VoidCallback add;
-  final VoidCallback delete;
+  final Function(int) delete;
+  final List<String> images;
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +47,41 @@ class PhotoPicker extends StatelessWidget {
           height: 72,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: images.length,
             separatorBuilder: (context, index) {
               return const SizedBox(width: 16);
             },
             itemBuilder: (context, index) {
-              return Container(
+              return SizedBox(
                 width: 72,
                 height: 72,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: colors.secondary,
-                ),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 4, top: 4),
-                    child: InkWell(
-                      onTap: delete,
-                      child: Icon(
-                        Icons.cancel,
-                        color: colors.primary,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Center(
+                        child: Image.file(
+                          File(images[index]),
+                          width: 72,
+                          height: 72,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4, top: 4),
+                        child: InkWell(
+                          onTap: () => delete(index),
+                          child: Icon(
+                            Icons.cancel,
+                            color: colors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

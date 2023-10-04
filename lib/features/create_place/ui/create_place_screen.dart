@@ -23,10 +23,50 @@ class CreatePlaceWidget extends StatefulWidget {
 }
 
 class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController latitudeController = TextEditingController();
-  final TextEditingController longitudeController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  CreatePlaceBloc get _bloc => context.read<CreatePlaceBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _nameController.addListener(() {
+      _bloc.add(
+        NameChangedEvent(name: _nameController.text),
+      );
+    });
+
+    _latitudeController.addListener(() {
+      _bloc.add(
+        LatitudeChangedEvent(latitude: _latitudeController.text),
+      );
+    });
+
+    _longitudeController.addListener(() {
+      _bloc.add(
+        LongitudeChangedEvent(longitude: _longitudeController.text),
+      );
+    });
+
+    _descriptionController.addListener(() {
+      _bloc.add(
+        DescriptionChangedEvent(description: _descriptionController.text),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +75,8 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
     final text = context.text;
     final colors = context.colors;
 
-    return BlocBuilder<CreatePlaceBloc, CreatePlaceState>(
+    return BlocConsumer<CreatePlaceBloc, CreatePlaceState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -56,8 +97,13 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
               children: [
                 const SizedBox(height: 24),
                 PhotoPicker(
-                  add: () {},
-                  delete: () {},
+                  add: () {
+                    _bloc.add(const PickImagesFromGalleryEvent());
+                  },
+                  delete: (index) {
+                    _bloc.add(DeleteImageFromSelectionEvent(index: index));
+                  },
+                  images: state.images ?? [],
                 ),
                 const SizedBox(height: 24),
                 SelectButton(
@@ -67,7 +113,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 ),
                 const SizedBox(height: 24),
                 OutlinedForm(
-                  controller: nameController,
+                  controller: _nameController,
                   label: l10n.placeName,
                   linesCount: 1,
                 ),
@@ -76,7 +122,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                   children: [
                     Flexible(
                       child: OutlinedForm(
-                        controller: latitudeController,
+                        controller: _latitudeController,
                         label: l10n.latitude,
                         linesCount: 1,
                       ),
@@ -84,7 +130,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                     const SizedBox(width: 16),
                     Flexible(
                       child: OutlinedForm(
-                        controller: longitudeController,
+                        controller: _longitudeController,
                         label: l10n.longitude,
                         linesCount: 1,
                       ),
@@ -104,9 +150,10 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 ),
                 const SizedBox(height: 36),
                 OutlinedForm(
-                    controller: descriptionController,
-                    label: l10n.description,
-                    linesCount: 5),
+                  controller: _descriptionController,
+                  label: l10n.description,
+                  linesCount: 5,
+                ),
                 BottomButton(
                   label: l10n.save,
                   onPressed: () {},
