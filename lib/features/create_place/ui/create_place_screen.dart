@@ -79,6 +79,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(l10n.newPlace),
             leading: InkWell(
@@ -116,6 +117,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                   controller: _nameController,
                   label: l10n.placeName,
                   linesCount: 1,
+                  isValid: state.isNameValid,
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -125,6 +127,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                         controller: _latitudeController,
                         label: l10n.latitude,
                         linesCount: 1,
+                        isValid: state.isLatitudeValid,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -133,6 +136,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                         controller: _longitudeController,
                         label: l10n.longitude,
                         linesCount: 1,
+                        isValid: state.isLongitudeValid,
                       ),
                     )
                   ],

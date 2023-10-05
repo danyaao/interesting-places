@@ -20,6 +20,10 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
           await _handleDeleteImageFromSelectionEvent(emitter, event);
         } else if (event is NameChangedEvent) {
           await _handleNameChangedEvent(emitter, event);
+        } else if (event is LatitudeChangedEvent) {
+          await _handleLatitudeChangedEvent(emitter, event);
+        } else if (event is LongitudeChangedEvent) {
+          await _handleLongitudeChangedEvent(emitter, event);
         }
       },
     );
@@ -51,7 +55,50 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
   Future<void> _handleNameChangedEvent(
     Emitter emitter,
     NameChangedEvent event,
-  ) async {}
+  ) async {
+    if (event.name.length < 3) {
+      emitter(state.copyWith(
+        isNameValid: false,
+      ));
+    } else {
+      emitter(state.copyWith(
+        name: event.name,
+        isNameValid: true,
+      ));
+    }
+  }
+
+  Future<void> _handleLatitudeChangedEvent(
+    Emitter emitter,
+    LatitudeChangedEvent event,
+  ) async {
+    if (double.tryParse(event.latitude) == null) {
+      emitter(state.copyWith(
+        isLatitudeValid: false,
+      ));
+    } else {
+      emitter(state.copyWith(
+        latitude: event.latitude,
+        isLatitudeValid: true,
+      ));
+    }
+  }
+
+  Future<void> _handleLongitudeChangedEvent(
+    Emitter emitter,
+    LongitudeChangedEvent event,
+  ) async {
+    if (double.tryParse(event.longitude) == null) {
+      emitter(state.copyWith(
+        isLongitudeValid: false,
+      ));
+    } else {
+      emitter(state.copyWith(
+        latitude: event.longitude,
+        isLongitudeValid: true,
+      ));
+    }
+  }
 
   Future<List<String>> _getImageFromGallery() async {
     final images = await ImagePicker().pickMultiImage();
