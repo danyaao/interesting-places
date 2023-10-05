@@ -1,0 +1,14 @@
+{
+  "newPlace": "Новое место",
+  "cancel": "Отмена",
+  "category": "КАТЕГОРИЯ",
+  "unselected": "Не выбрано",
+  "placeName": "НАЗВАНИЕ",
+  "latitude": "ШИРОТА",
+  "longitude": "ДОЛГОТА",
+  "pointOnTheMap": "Указать на карте",
+  "description": "ОПИСАНИЕ",
+  "descriptionHint": "Текст",
+  "create": "Создать",
+  "save": "Сохранить"
+}
