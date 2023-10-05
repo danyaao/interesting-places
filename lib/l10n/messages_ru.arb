@@ -1,14 +1,15 @@
 {
-  "newPlace": "Новое место",
-  "cancel": "Отмена",
-  "category": "КАТЕГОРИЯ",
-  "unselected": "Не выбрано",
-  "placeName": "НАЗВАНИЕ",
-  "latitude": "ШИРОТА",
-  "longitude": "ДОЛГОТА",
-  "pointOnTheMap": "Указать на карте",
-  "description": "ОПИСАНИЕ",
-  "descriptionHint": "Текст",
-  "create": "Создать",
-  "save": "Сохранить"
+  "newPlaceAppBar": "Новое место",
+  "cancelAppBar": "Отмена",
+  "categoryButton": "КАТЕГОРИЯ",
+  "unselectedButton": "Не выбрано",
+  "placeNameTextField": "НАЗВАНИЕ",
+  "latitudeTextField": "ШИРОТА",
+  "longitudeTextField": "ДОЛГОТА",
+  "pointOnTheMapButton": "Указать на карте",
+  "descriptionTextField": "ОПИСАНИЕ",
+  "createButton": "СОЗДАТЬ",
+  "saveButton": "СОХРАНИТЬ",
+  "categoryAppBar": "Категория",
+  "categories": "Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе"
 }

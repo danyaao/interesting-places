@@ -1,7 +1,7 @@
 part of 'create_place_bloc.dart';
 
 class CreatePlaceState extends Equatable {
-  const CreatePlaceState({
+  CreatePlaceState({
     this.images,
     this.name,
     this.isNameValid,
@@ -10,7 +10,11 @@ class CreatePlaceState extends Equatable {
     this.longitude,
     this.isLongitudeValid,
     this.category,
-  });
+  }) : canCreate = (images?.isNotEmpty ?? false) &&
+            (isNameValid ?? false) &&
+            (isLatitudeValid ?? false) &&
+            (isLongitudeValid ?? false) &&
+            (category?.isNotEmpty ?? false);
 
   final List<String>? images;
   final String? name;
@@ -19,8 +23,8 @@ class CreatePlaceState extends Equatable {
   final bool? isLatitudeValid;
   final String? longitude;
   final bool? isLongitudeValid;
-  final Category? category;
-  final bool canSave = false;
+  final String? category;
+  final bool? canCreate;
 
   CreatePlaceState copyWith({
     List<String>? images,
@@ -30,7 +34,7 @@ class CreatePlaceState extends Equatable {
     bool? isLatitudeValid,
     String? longitude,
     bool? isLongitudeValid,
-    Category? category,
+    String? category,
   }) {
     return CreatePlaceState(
       images: images ?? this.images,
@@ -54,15 +58,6 @@ class CreatePlaceState extends Equatable {
         longitude,
         isLongitudeValid,
         category,
-        canSave,
+        canCreate,
       ];
-}
-
-enum Category {
-  cinema,
-  restaurant,
-  specialPlace,
-  theatre,
-  museum,
-  cafe,
 }

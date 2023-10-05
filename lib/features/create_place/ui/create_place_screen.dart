@@ -81,12 +81,12 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text(l10n.newPlace),
+            title: Text(l10n.newPlaceAppBar),
             leading: InkWell(
               onTap: () {},
               child: Center(
                 child: Text(
-                  l10n.cancel,
+                  l10n.cancelAppBar,
                   style: text.superSmall,
                 ),
               ),
@@ -108,14 +108,18 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 ),
                 const SizedBox(height: 24),
                 SelectButton(
-                  select: () {},
-                  label: l10n.category,
-                  selected: l10n.unselected,
+                  select: () {
+                    _bloc.add(SelectCategoryEvent(
+                      context: context,
+                    ));
+                  },
+                  label: l10n.categoryButton,
+                  selected: state.category ?? l10n.unselectedButton,
                 ),
                 const SizedBox(height: 24),
                 OutlinedForm(
                   controller: _nameController,
-                  label: l10n.placeName,
+                  label: l10n.placeNameTextField,
                   linesCount: 1,
                   isValid: state.isNameValid,
                 ),
@@ -125,18 +129,20 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                     Flexible(
                       child: OutlinedForm(
                         controller: _latitudeController,
-                        label: l10n.latitude,
+                        label: l10n.latitudeTextField,
                         linesCount: 1,
                         isValid: state.isLatitudeValid,
+                        textInputType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: OutlinedForm(
                         controller: _longitudeController,
-                        label: l10n.longitude,
+                        label: l10n.longitudeTextField,
                         linesCount: 1,
                         isValid: state.isLongitudeValid,
+                        textInputType: TextInputType.number,
                       ),
                     )
                   ],
@@ -147,7 +153,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text(
-                      l10n.pointOnTheMap,
+                      l10n.pointOnTheMapButton,
                       style: TextStyle(color: colors.secondary),
                     ),
                   ),
@@ -155,12 +161,13 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 const SizedBox(height: 36),
                 OutlinedForm(
                   controller: _descriptionController,
-                  label: l10n.description,
+                  label: l10n.descriptionTextField,
                   linesCount: 5,
                 ),
                 BottomButton(
-                  label: l10n.save,
+                  label: l10n.createButton,
                   onPressed: () {},
+                  isActive: state.canCreate ?? false,
                 ),
               ],
             ),

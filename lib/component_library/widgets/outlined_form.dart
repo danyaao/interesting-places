@@ -8,6 +8,7 @@ class OutlinedForm extends StatelessWidget {
     required this.label,
     required this.linesCount,
     this.isValid,
+    this.textInputType = TextInputType.text,
   }) : isActive = isValid != null;
 
   final TextEditingController controller;
@@ -15,6 +16,7 @@ class OutlinedForm extends StatelessWidget {
   final int linesCount;
   final bool? isValid;
   final bool isActive;
+  final TextInputType textInputType;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class OutlinedForm extends StatelessWidget {
           controller: controller,
           minLines: linesCount,
           maxLines: linesCount,
+          keyboardType: textInputType,
         ),
       ],
     );

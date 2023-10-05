@@ -75,3 +75,16 @@ class DescriptionChangedEvent extends CreatePlaceEvent {
         description,
       ];
 }
+
+class SelectCategoryEvent extends CreatePlaceEvent {
+  const SelectCategoryEvent({
+    required this.context,
+  });
+
+  final BuildContext context;
+
+  @override
+  List<Object?> get props => [
+        context,
+      ];
+}

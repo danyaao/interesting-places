@@ -1,13 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:interesting_places/features/create_place/ui/select_categoty_screen.dart';
 
 part 'create_place_event.dart';
 
 part 'create_place_state.dart';
 
 class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
-  CreatePlaceBloc() : super(const CreatePlaceState()) {
+  CreatePlaceBloc() : super(CreatePlaceState()) {
     _registerEventHandler();
   }
 
@@ -24,6 +26,8 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
           await _handleLatitudeChangedEvent(emitter, event);
         } else if (event is LongitudeChangedEvent) {
           await _handleLongitudeChangedEvent(emitter, event);
+        } else if (event is SelectCategoryEvent) {
+          await _handleSelectCategoryEvent(emitter, event);
         }
       },
     );
@@ -98,6 +102,21 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
         isLongitudeValid: true,
       ));
     }
+  }
+
+  Future<void> _handleSelectCategoryEvent(
+    Emitter emitter,
+    SelectCategoryEvent event,
+  ) async {
+    final context = event.context;
+    final selectedCategory = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SelectCategoryScreen()),
+    );
+
+    emitter(state.copyWith(
+      category: selectedCategory,
+    ));
   }
 
   Future<List<String>> _getImageFromGallery() async {

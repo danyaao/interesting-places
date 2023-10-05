@@ -5,38 +5,41 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get newPlace => 'Новое место';
+  String get newPlaceAppBar => 'Новое место';
 
   @override
-  String get cancel => 'Отмена';
+  String get cancelAppBar => 'Отмена';
 
   @override
-  String get category => 'КАТЕГОРИЯ';
+  String get categoryButton => 'КАТЕГОРИЯ';
 
   @override
-  String get unselected => 'Не выбрано';
+  String get unselectedButton => 'Не выбрано';
 
   @override
-  String get placeName => 'НАЗВАНИЕ';
+  String get placeNameTextField => 'НАЗВАНИЕ';
 
   @override
-  String get latitude => 'ШИРОТА';
+  String get latitudeTextField => 'ШИРОТА';
 
   @override
-  String get longitude => 'ДОЛГОТА';
+  String get longitudeTextField => 'ДОЛГОТА';
 
   @override
-  String get pointOnTheMap => 'Указать на карте';
+  String get pointOnTheMapButton => 'Указать на карте';
 
   @override
-  String get description => 'ОПИСАНИЕ';
+  String get descriptionTextField => 'ОПИСАНИЕ';
 
   @override
-  String get descriptionHint => 'Текст';
+  String get createButton => 'СОЗДАТЬ';
 
   @override
-  String get create => 'Создать';
+  String get saveButton => 'СОХРАНИТЬ';
 
   @override
-  String get save => 'Сохранить';
+  String get categoryAppBar => 'Категория';
+
+  @override
+  String get categories => 'Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе';
 }

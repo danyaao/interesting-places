@@ -33,7 +33,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
         onPrimary = LightColorPalette.darkest,
         secondary = LightColorPalette.green,
         onSecondary = LightColorPalette.lightGrey,
-        surface = LightColorPalette.green,
+        surface = LightColorPalette.grey,
         onSurface = LightColorPalette.darker,
         background = LightColorPalette.white,
         onBackground = LightColorPalette.green,
