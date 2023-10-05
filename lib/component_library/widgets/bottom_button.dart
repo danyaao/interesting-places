@@ -6,10 +6,12 @@ class BottomButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.label,
+    required this.isActive,
   });
 
   final VoidCallback onPressed;
   final String label;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,11 @@ class BottomButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              backgroundColor: colors.secondary,
-              foregroundColor: colors.primary,
+              backgroundColor: isActive ? colors.secondary : colors.onSecondary,
+              foregroundColor: isActive ? colors.primary : colors.onSurface,
+              elevation: 0,
             ),
-            onPressed: onPressed,
+            onPressed: isActive ? onPressed : () {},
             child: SizedBox(
               width: double.infinity,
               height: 48,
