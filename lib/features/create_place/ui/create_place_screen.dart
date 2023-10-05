@@ -23,10 +23,50 @@ class CreatePlaceWidget extends StatefulWidget {
 }
 
 class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController latitudeController = TextEditingController();
-  final TextEditingController longitudeController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  CreatePlaceBloc get _bloc => context.read<CreatePlaceBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _nameController.addListener(() {
+      _bloc.add(
+        NameChangedEvent(name: _nameController.text),
+      );
+    });
+
+    _latitudeController.addListener(() {
+      _bloc.add(
+        LatitudeChangedEvent(latitude: _latitudeController.text),
+      );
+    });
+
+    _longitudeController.addListener(() {
+      _bloc.add(
+        LongitudeChangedEvent(longitude: _longitudeController.text),
+      );
+    });
+
+    _descriptionController.addListener(() {
+      _bloc.add(
+        DescriptionChangedEvent(description: _descriptionController.text),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +75,18 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
     final text = context.text;
     final colors = context.colors;
 
-    return BlocBuilder<CreatePlaceBloc, CreatePlaceState>(
+    return BlocConsumer<CreatePlaceBloc, CreatePlaceState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text(l10n.newPlace),
+            title: Text(l10n.newPlaceAppBar),
             leading: InkWell(
               onTap: () {},
               child: Center(
                 child: Text(
-                  l10n.cancel,
+                  l10n.cancelAppBar,
                   style: text.superSmall,
                 ),
               ),
@@ -56,37 +98,51 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
               children: [
                 const SizedBox(height: 24),
                 PhotoPicker(
-                  add: () {},
-                  delete: () {},
+                  add: () {
+                    _bloc.add(const PickImagesFromGalleryEvent());
+                  },
+                  delete: (index) {
+                    _bloc.add(DeleteImageFromSelectionEvent(index: index));
+                  },
+                  images: state.images ?? [],
                 ),
                 const SizedBox(height: 24),
                 SelectButton(
-                  select: () {},
-                  label: l10n.category,
-                  selected: l10n.unselected,
+                  select: () {
+                    _bloc.add(SelectCategoryEvent(
+                      context: context,
+                    ));
+                  },
+                  label: l10n.categoryButton,
+                  selected: state.category ?? l10n.unselectedButton,
                 ),
                 const SizedBox(height: 24),
                 OutlinedForm(
-                  controller: nameController,
-                  label: l10n.placeName,
+                  controller: _nameController,
+                  label: l10n.placeNameTextField,
                   linesCount: 1,
+                  isValid: state.isNameValid,
                 ),
                 const SizedBox(height: 24),
                 Row(
                   children: [
                     Flexible(
                       child: OutlinedForm(
-                        controller: latitudeController,
-                        label: l10n.latitude,
+                        controller: _latitudeController,
+                        label: l10n.latitudeTextField,
                         linesCount: 1,
+                        isValid: state.isLatitudeValid,
+                        textInputType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: OutlinedForm(
-                        controller: longitudeController,
-                        label: l10n.longitude,
+                        controller: _longitudeController,
+                        label: l10n.longitudeTextField,
                         linesCount: 1,
+                        isValid: state.isLongitudeValid,
+                        textInputType: TextInputType.number,
                       ),
                     )
                   ],
@@ -97,19 +153,21 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text(
-                      l10n.pointOnTheMap,
+                      l10n.pointOnTheMapButton,
                       style: TextStyle(color: colors.secondary),
                     ),
                   ),
                 ),
                 const SizedBox(height: 36),
                 OutlinedForm(
-                    controller: descriptionController,
-                    label: l10n.description,
-                    linesCount: 5),
+                  controller: _descriptionController,
+                  label: l10n.descriptionTextField,
+                  linesCount: 5,
+                ),
                 BottomButton(
-                  label: l10n.save,
+                  label: l10n.createButton,
                   onPressed: () {},
+                  isActive: state.canCreate ?? false,
                 ),
               ],
             ),
