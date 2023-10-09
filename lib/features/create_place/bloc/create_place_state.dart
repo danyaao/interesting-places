@@ -2,62 +2,67 @@ part of 'create_place_bloc.dart';
 
 class CreatePlaceState extends Equatable {
   CreatePlaceState({
-    this.images,
     this.name,
     this.isNameValid,
+    this.category,
+    this.description,
     this.latitude,
     this.isLatitudeValid,
     this.longitude,
     this.isLongitudeValid,
-    this.category,
+    this.images,
   }) : canCreate = (images?.isNotEmpty ?? false) &&
             (isNameValid ?? false) &&
             (isLatitudeValid ?? false) &&
             (isLongitudeValid ?? false) &&
             (category?.isNotEmpty ?? false);
 
-  final List<String>? images;
   final String? name;
   final bool? isNameValid;
+  final String? category;
+  final String? description;
   final String? latitude;
   final bool? isLatitudeValid;
   final String? longitude;
   final bool? isLongitudeValid;
-  final String? category;
+  final List<Uint8List>? images;
   final bool? canCreate;
 
   CreatePlaceState copyWith({
-    List<String>? images,
     String? name,
     bool? isNameValid,
+    String? category,
+    String? description,
     String? latitude,
     bool? isLatitudeValid,
     String? longitude,
     bool? isLongitudeValid,
-    String? category,
+    List<Uint8List>? images,
   }) {
     return CreatePlaceState(
-      images: images ?? this.images,
       name: name ?? this.name,
       isNameValid: isNameValid ?? this.isNameValid,
+      category: category ?? this.category,
+      description: description ?? this.description,
       latitude: latitude ?? this.latitude,
       isLatitudeValid: isLatitudeValid ?? this.isLatitudeValid,
       longitude: longitude ?? this.longitude,
       isLongitudeValid: isLongitudeValid ?? this.isLongitudeValid,
-      category: category ?? this.category,
+      images: images ?? this.images,
     );
   }
 
   @override
   List<Object?> get props => [
-        images,
         name,
         isNameValid,
+        category,
+        description,
         latitude,
         isLatitudeValid,
         longitude,
         isLongitudeValid,
-        category,
         canCreate,
+        images,
       ];
 }

@@ -42,4 +42,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get categories => 'Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе';
+
+  @override
+  String get placeListAppBar => 'Список интересных мест';
+
+  @override
+  String get searchBarTextFieldHint => 'Поиск';
+
+  @override
+  String get newPlaceButton => 'НОВОЕ МЕСТО';
 }

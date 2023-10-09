@@ -1,33 +1,46 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:interesting_places/features/create_place/ui/select_categoty_screen.dart';
+import 'package:interesting_places/domain_models/place_dm.dart';
+import 'package:interesting_places/features/create_place/ui/select_category_screen.dart';
+import 'package:interesting_places/place_repository/place_repository.dart';
 
 part 'create_place_event.dart';
 
 part 'create_place_state.dart';
 
 class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
-  CreatePlaceBloc() : super(CreatePlaceState()) {
+  CreatePlaceBloc({
+    required PlaceRepository placeRepository,
+  })  : _placeRepository = placeRepository,
+        super(CreatePlaceState()) {
     _registerEventHandler();
   }
+
+  final PlaceRepository _placeRepository;
 
   void _registerEventHandler() {
     on<CreatePlaceEvent>(
       (event, emitter) async {
-        if (event is PickImagesFromGalleryEvent) {
-          await _handlePickImagesFromGalleryEvent(emitter);
-        } else if (event is DeleteImageFromSelectionEvent) {
-          await _handleDeleteImageFromSelectionEvent(emitter, event);
-        } else if (event is NameChangedEvent) {
-          await _handleNameChangedEvent(emitter, event);
-        } else if (event is LatitudeChangedEvent) {
-          await _handleLatitudeChangedEvent(emitter, event);
-        } else if (event is LongitudeChangedEvent) {
-          await _handleLongitudeChangedEvent(emitter, event);
-        } else if (event is SelectCategoryEvent) {
-          await _handleSelectCategoryEvent(emitter, event);
+        switch (event) {
+          case PickImagesFromGalleryEvent():
+            await _handlePickImagesFromGalleryEvent(emitter);
+          case DeleteImageFromSelectionEvent():
+            await _handleDeleteImageFromSelectionEvent(emitter, event);
+          case NameChangedEvent():
+            await _handleNameChangedEvent(emitter, event);
+          case LatitudeChangedEvent():
+            await _handleLatitudeChangedEvent(emitter, event);
+          case LongitudeChangedEvent():
+            await _handleLongitudeChangedEvent(emitter, event);
+          case SelectCategoryEvent():
+            await _handleSelectCategoryEvent(emitter, event);
+          case SavePlaceEvent():
+            await _handleSavePlaceEvent(emitter, event);
         }
       },
     );
@@ -119,10 +132,31 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
     ));
   }
 
-  Future<List<String>> _getImageFromGallery() async {
-    final images = await ImagePicker().pickMultiImage();
-    final paths = images.map((e) => e.path).toList();
+  Future<void> _handleSavePlaceEvent(
+    Emitter emitter,
+    SavePlaceEvent event,
+  ) async {
+    try {
+      final placeDM = PlaceDM(
+        name: state.name!,
+        category: state.category!,
+        latitude: double.tryParse(state.latitude ?? '0')!,
+        longitude: double.tryParse(state.longitude ?? '0')!,
+        images: state.images ?? const [],
+      );
 
-    return paths;
+      _placeRepository.insertPlace(placeDM);
+
+      Navigator.pop(event.context);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Uint8List>> _getImageFromGallery() async {
+    final xFiles = await ImagePicker().pickMultiImage();
+    final images = xFiles.map((e) => File(e.path).readAsBytesSync()).toList();
+
+    return images;
   }
 }

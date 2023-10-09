@@ -11,5 +11,8 @@
   "createButton": "СОЗДАТЬ",
   "saveButton": "СОХРАНИТЬ",
   "categoryAppBar": "Категория",
-  "categories": "Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе"
+  "categories": "Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе",
+  "placeListAppBar": "Список интересных мест",
+  "searchBarTextFieldHint": "Поиск",
+  "newPlaceButton": "НОВОЕ МЕСТО"
 }

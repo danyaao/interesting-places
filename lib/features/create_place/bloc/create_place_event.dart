@@ -37,6 +37,32 @@ class NameChangedEvent extends CreatePlaceEvent {
       ];
 }
 
+class SelectCategoryEvent extends CreatePlaceEvent {
+  const SelectCategoryEvent({
+    required this.context,
+  });
+
+  final BuildContext context;
+
+  @override
+  List<Object?> get props => [
+        context,
+      ];
+}
+
+class DescriptionChangedEvent extends CreatePlaceEvent {
+  const DescriptionChangedEvent({
+    required this.description,
+  });
+
+  final String description;
+
+  @override
+  List<Object?> get props => [
+        description,
+      ];
+}
+
 class LatitudeChangedEvent extends CreatePlaceEvent {
   const LatitudeChangedEvent({
     required this.latitude,
@@ -63,21 +89,8 @@ class LongitudeChangedEvent extends CreatePlaceEvent {
       ];
 }
 
-class DescriptionChangedEvent extends CreatePlaceEvent {
-  const DescriptionChangedEvent({
-    required this.description,
-  });
-
-  final String description;
-
-  @override
-  List<Object?> get props => [
-        description,
-      ];
-}
-
-class SelectCategoryEvent extends CreatePlaceEvent {
-  const SelectCategoryEvent({
+class SavePlaceEvent extends CreatePlaceEvent {
+  const SavePlaceEvent({
     required this.context,
   });
 
