@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:interesting_places/component_library/component_library.dart';
@@ -12,8 +12,8 @@ class PhotoPicker extends StatelessWidget {
   });
 
   final VoidCallback add;
-  final Function(int) delete;
-  final List<String> images;
+  final ValueSetter delete;
+  final List<Uint8List> images;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,8 @@ class PhotoPicker extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Center(
-                        child: Image.file(
-                          File(images[index]),
+                        child: Image.memory(
+                          images[index],
                           width: 72,
                           height: 72,
                           fit: BoxFit.cover,

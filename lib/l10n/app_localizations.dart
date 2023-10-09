@@ -168,6 +168,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе'**
   String get categories;
+
+  /// No description provided for @placeListAppBar.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список интересных мест'**
+  String get placeListAppBar;
+
+  /// No description provided for @searchBarTextFieldHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск'**
+  String get searchBarTextFieldHint;
+
+  /// No description provided for @newPlaceButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'НОВОЕ МЕСТО'**
+  String get newPlaceButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

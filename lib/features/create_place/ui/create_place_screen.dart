@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interesting_places/component_library/component_library.dart';
 import 'package:interesting_places/features/create_place/bloc/create_place_bloc.dart';
+import 'package:interesting_places/place_repository/place_repository.dart';
 
 class CreatePlaceScreen extends StatelessWidget {
-  const CreatePlaceScreen({super.key});
+  const CreatePlaceScreen({
+    super.key,
+    required this.placeRepository,
+  });
+
+  final PlaceRepository placeRepository;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CreatePlaceBloc>(
-      create: (_) => CreatePlaceBloc(),
+      create: (_) => CreatePlaceBloc(
+        placeRepository: placeRepository,
+      ),
       child: const CreatePlaceWidget(),
     );
   }
@@ -24,9 +32,9 @@ class CreatePlaceWidget extends StatefulWidget {
 
 class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
 
   CreatePlaceBloc get _bloc => context.read<CreatePlaceBloc>();
 
@@ -37,6 +45,12 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
     _nameController.addListener(() {
       _bloc.add(
         NameChangedEvent(name: _nameController.text),
+      );
+    });
+
+    _descriptionController.addListener(() {
+      _bloc.add(
+        DescriptionChangedEvent(description: _descriptionController.text),
       );
     });
 
@@ -51,20 +65,14 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
         LongitudeChangedEvent(longitude: _longitudeController.text),
       );
     });
-
-    _descriptionController.addListener(() {
-      _bloc.add(
-        DescriptionChangedEvent(description: _descriptionController.text),
-      );
-    });
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _descriptionController.dispose();
     _latitudeController.dispose();
     _longitudeController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -75,8 +83,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
     final text = context.text;
     final colors = context.colors;
 
-    return BlocConsumer<CreatePlaceBloc, CreatePlaceState>(
-      listener: (context, state) {},
+    return BlocBuilder<CreatePlaceBloc, CreatePlaceState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -166,7 +173,11 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 ),
                 BottomButton(
                   label: l10n.createButton,
-                  onPressed: () {},
+                  onPressed: () {
+                    _bloc.add(SavePlaceEvent(
+                      context: context,
+                    ));
+                  },
                   isActive: state.canCreate ?? false,
                 ),
               ],
