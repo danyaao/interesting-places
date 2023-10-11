@@ -140,14 +140,15 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
       final placeDM = PlaceDM(
         name: state.name!,
         category: state.category!,
+        description: state.description,
         latitude: double.tryParse(state.latitude ?? '0')!,
         longitude: double.tryParse(state.longitude ?? '0')!,
-        images: state.images ?? const [],
+        images: state.images!,
       );
 
-      _placeRepository.insertPlace(placeDM);
+      await _placeRepository.insertPlace(placeDM);
 
-      Navigator.pop(event.context);
+      emitter(state.copyWith(placeDM: placeDM));
     } catch (e) {
       rethrow;
     }

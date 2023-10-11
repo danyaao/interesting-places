@@ -11,6 +11,7 @@ class CreatePlaceState extends Equatable {
     this.longitude,
     this.isLongitudeValid,
     this.images,
+    this.placeDM,
   }) : canCreate = (images?.isNotEmpty ?? false) &&
             (isNameValid ?? false) &&
             (isLatitudeValid ?? false) &&
@@ -27,6 +28,7 @@ class CreatePlaceState extends Equatable {
   final bool? isLongitudeValid;
   final List<Uint8List>? images;
   final bool? canCreate;
+  final PlaceDM? placeDM;
 
   CreatePlaceState copyWith({
     String? name,
@@ -38,6 +40,7 @@ class CreatePlaceState extends Equatable {
     String? longitude,
     bool? isLongitudeValid,
     List<Uint8List>? images,
+    PlaceDM? placeDM,
   }) {
     return CreatePlaceState(
       name: name ?? this.name,
@@ -49,6 +52,7 @@ class CreatePlaceState extends Equatable {
       longitude: longitude ?? this.longitude,
       isLongitudeValid: isLongitudeValid ?? this.isLongitudeValid,
       images: images ?? this.images,
+      placeDM: placeDM ?? this.placeDM,
     );
   }
 
@@ -64,5 +68,6 @@ class CreatePlaceState extends Equatable {
         isLongitudeValid,
         canCreate,
         images,
+        placeDM,
       ];
 }

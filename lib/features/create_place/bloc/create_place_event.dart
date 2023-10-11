@@ -90,14 +90,8 @@ class LongitudeChangedEvent extends CreatePlaceEvent {
 }
 
 class SavePlaceEvent extends CreatePlaceEvent {
-  const SavePlaceEvent({
-    required this.context,
-  });
-
-  final BuildContext context;
+  const SavePlaceEvent();
 
   @override
-  List<Object?> get props => [
-        context,
-      ];
+  List<Object?> get props => [];
 }

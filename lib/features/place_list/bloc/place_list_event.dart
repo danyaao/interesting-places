@@ -13,13 +13,29 @@ class PlaceListRefreshEvent extends PlaceListEvent {
 
 class PlaceListCreatePlaceEvent extends PlaceListEvent {
   const PlaceListCreatePlaceEvent({
-    required this.context,
+    required this.placeDM,
   });
 
-  final BuildContext context;
+  final PlaceDM placeDM;
 
   @override
   List<Object?> get props => [
-        context,
+        placeDM,
+      ];
+}
+
+class PlaceListFilterEvent extends PlaceListEvent {
+  const PlaceListFilterEvent({
+    required this.placeFilters,
+    required this.selectedIndexes,
+  });
+
+  final PlaceFilters placeFilters;
+  final List<int> selectedIndexes;
+
+  @override
+  List<Object?> get props => [
+        placeFilters,
+        selectedIndexes,
       ];
 }

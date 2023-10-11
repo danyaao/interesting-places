@@ -27,8 +27,8 @@ class BottomButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              backgroundColor: isActive ? colors.secondary : colors.onSecondary,
-              foregroundColor: isActive ? colors.primary : colors.onSurface,
+              backgroundColor: isActive ? colors.green : colors.lightGrey,
+              foregroundColor: isActive ? colors.white : colors.grey,
               elevation: 0,
             ),
             onPressed: isActive ? onPressed : () {},

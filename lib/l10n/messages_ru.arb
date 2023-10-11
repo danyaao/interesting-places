@@ -14,5 +14,11 @@
   "categories": "Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе",
   "placeListAppBar": "Список интересных мест",
   "searchBarTextFieldHint": "Поиск",
-  "newPlaceButton": "НОВОЕ МЕСТО"
+  "newPlaceButton": "НОВОЕ МЕСТО",
+  "somethingWentWrong": "Что-то пошло не так",
+  "categoriesGridView": "КАТЕГОРИИ",
+  "rangeSlider": "Расстояние",
+  "fromToSlider": "от 10 до 30 км",
+  "showButton": "Показать",
+  "clearButton": "Очистить"
 }

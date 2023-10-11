@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interesting_places/component_library/component_library.dart';
+import 'package:interesting_places/domain_models/place_dm.dart';
+import 'package:interesting_places/domain_models/place_filters.dart';
+import 'package:interesting_places/features/create_place/create_place.dart';
+import 'package:interesting_places/features/filter/ui/filter_screen.dart';
 import 'package:interesting_places/features/place_list/bloc/place_list_bloc.dart';
+import 'package:interesting_places/features/place_list/ui/place_list_list_view.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 class PlaceListScreen extends StatelessWidget {
@@ -14,32 +19,39 @@ class PlaceListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PlaceListBloc>(
-      create: (context) => PlaceListBloc(
-        placeRepository: placeRepository,
+    return RepositoryProvider<PlaceRepository>(
+      create: (context) => placeRepository,
+      child: BlocProvider<PlaceListBloc>(
+        create: (context) => PlaceListBloc(
+          placeRepository: placeRepository,
+        ),
+        child: const PlaceListWidget(),
       ),
-      child: const PlaceListWidget(),
     );
   }
 }
 
 class PlaceListWidget extends StatefulWidget {
-  const PlaceListWidget({super.key});
+  const PlaceListWidget({
+    super.key,
+  });
 
   @override
   State<PlaceListWidget> createState() => _PlaceListWidgetState();
 }
 
 class _PlaceListWidgetState extends State<PlaceListWidget> {
+  final TextEditingController searchBarController = TextEditingController();
+
   PlaceListBloc get _bloc => context.read<PlaceListBloc>();
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = context.theme;
+    final colors = context.colors;
 
-    return BlocConsumer<PlaceListBloc, PlaceListState>(
-      listener: (context, state) {},
+    return BlocBuilder<PlaceListBloc, PlaceListState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -51,55 +63,81 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
               children: [
                 Column(
                   children: [
-                    const TextField(),
-                    const SizedBox(height: 30),
+                    SearchForm(
+                      controller: searchBarController,
+                      isFiltered: state is PlaceListSuccessState
+                          ? state.placeFilters.isFiltering
+                          : false,
+                      onPressed: () async {
+                        try {
+                          final filterResult = await openFilterPlaceScreen(
+                            placeRepository: context.read<PlaceRepository>(),
+                            context: context,
+                            currentPlaceFilters: state is PlaceListSuccessState
+                                ? state.placeFilters
+                                : const PlaceFilters.clear(),
+                            currentSelectedIndexes:
+                                state is PlaceListSuccessState
+                                    ? state.selectedFilterIndexes
+                                    : const [],
+                          );
+
+                          final placeFilters = filterResult.$1;
+                          final selectedIndexes = filterResult.$2;
+
+                          _bloc.add(
+                            PlaceListFilterEvent(
+                              placeFilters: placeFilters,
+                              selectedIndexes: selectedIndexes,
+                            ),
+                          );
+                        } catch (e) {
+                          rethrow;
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 32),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
                           _bloc.add(const PlaceListRefreshEvent());
                         },
-                        child: state is PlaceListSuccessState
-                            ? ListView.builder(
-                                itemCount: state.places.length,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      height: 188,
-                                      child: Stack(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            child: Image.memory(
-                                              state.places[index].images.first,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Container(
-                                            color: Colors.white,
-                                            child:
-                                                Text(state.places[index].name),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : const FlutterLogo(),
+                        child: switch (state) {
+                          PlaceListSuccessState() => PlaceListListView(
+                              places: state.places,
+                            ),
+                          PlaceListInitialState() => Center(
+                              child: CircularProgressIndicator(
+                                color: colors.darkest,
+                              ),
+                            ),
+                          PlaceListFailureState() => Center(
+                              child: Text(
+                                l10n.somethingWentWrong,
+                                style: TextStyle(
+                                  color: colors.red,
+                                ),
+                              ),
+                            ),
+                        },
                       ),
                     ),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _bloc.add(PlaceListCreatePlaceEvent(context: context));
-                    },
-                    child: Text(l10n.newPlaceButton),
-                  ),
+                BottomFloatingButton(
+                  label: l10n.newPlaceButton,
+                  onPressed: () async {
+                    final placeDM = await openCreatePlaceScreen(
+                      placeRepository: context.read<PlaceRepository>(),
+                      context: context,
+                    );
+
+                    _bloc.add(
+                      PlaceListCreatePlaceEvent(
+                        placeDM: placeDM,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -107,5 +145,42 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
         );
       },
     );
+  }
+
+  Future<PlaceDM> openCreatePlaceScreen({
+    required PlaceRepository placeRepository,
+    required BuildContext context,
+  }) async {
+    final PlaceDM place = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreatePlaceScreen(
+          placeRepository: placeRepository,
+        ),
+      ),
+    );
+
+    return place;
+  }
+
+  Future<(PlaceFilters, List<int>)> openFilterPlaceScreen({
+    required PlaceRepository placeRepository,
+    required BuildContext context,
+    required PlaceFilters currentPlaceFilters,
+    required List<int> currentSelectedIndexes,
+  }) async {
+    final (PlaceFilters places, List<int> selectedIndexes) =
+        await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FilterScreen(
+          placeRepository: placeRepository,
+          placeFilters: currentPlaceFilters,
+          selectedIndexes: currentSelectedIndexes,
+        ),
+      ),
+    );
+
+    return (places, selectedIndexes);
   }
 }

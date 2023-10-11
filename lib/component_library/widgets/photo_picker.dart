@@ -28,7 +28,7 @@ class PhotoPicker extends StatelessWidget {
             onPressed: add,
             style: OutlinedButton.styleFrom(
               side: BorderSide(
-                color: colors.secondary,
+                color: colors.green,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -36,7 +36,7 @@ class PhotoPicker extends StatelessWidget {
             ),
             child: Icon(
               Icons.add,
-              color: colors.secondary,
+              color: colors.green,
               size: 40,
             ),
           ),
@@ -76,7 +76,7 @@ class PhotoPicker extends StatelessWidget {
                           onTap: () => delete(index),
                           child: Icon(
                             Icons.cancel,
-                            color: colors.primary,
+                            color: colors.white,
                           ),
                         ),
                       ),

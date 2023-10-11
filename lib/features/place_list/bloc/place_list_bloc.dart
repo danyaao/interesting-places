@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:interesting_places/domain_models/place_dm.dart';
-import 'package:interesting_places/features/create_place/create_place.dart';
+import 'package:interesting_places/domain_models/place_filters.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 part 'place_list_event.dart';
@@ -29,6 +28,8 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
           await _handlePlaceListRefreshEvent(emitter);
         case PlaceListCreatePlaceEvent():
           await _handlePlaceListCreatePlaceEvent(emitter, event);
+        case PlaceListFilterEvent():
+          await _handlePlaceListFilterEvent(emitter, event);
       }
     });
   }
@@ -37,8 +38,17 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     Emitter emitter,
   ) async {
     try {
-      final places = await _loadPlaces();
-      emitter(PlaceListSuccessState(places: places));
+      final currentState = state;
+      if (currentState is PlaceListSuccessState) {
+        final places =
+            await _loadPlaces(placeFilters: currentState.placeFilters);
+
+        emitter(currentState.copyWith(places: places));
+      } else {
+        final places = await _loadPlaces();
+
+        emitter(PlaceListSuccessState(places: places));
+      }
     } catch (e) {
       emitter(PlaceListFailureState());
       rethrow;
@@ -49,19 +59,46 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     Emitter emitter,
     PlaceListCreatePlaceEvent event,
   ) async {
-    await Navigator.push(
-      event.context,
-      MaterialPageRoute(
-        builder: (context) =>
-            CreatePlaceScreen(placeRepository: _placeRepository),
-      ),
+    final currentState = state;
+
+    final List<PlaceDM> newPlaces = [];
+
+    switch (currentState) {
+      case PlaceListSuccessState():
+        newPlaces.addAll(currentState.places.toList());
+        newPlaces.add(event.placeDM);
+      default:
+        newPlaces.add(event.placeDM);
+    }
+
+    emitter(
+      PlaceListSuccessState(places: newPlaces),
     );
+  }
+
+  Future<void> _handlePlaceListFilterEvent(
+    Emitter emitter,
+    PlaceListFilterEvent event,
+  ) async {
+    final currentState = state;
+    if (currentState is PlaceListSuccessState) {
+      emitter(
+        PlaceListSuccessState(
+          places: currentState.places,
+          placeFilters: event.placeFilters,
+          selectedFilterIndexes: event.selectedIndexes,
+        ),
+      );
+    }
 
     add(const PlaceListRefreshEvent());
   }
 
-  Future<List<PlaceDM>> _loadPlaces() async {
-    final places = _placeRepository.getPlacesFromStorage();
+  Future<List<PlaceDM>> _loadPlaces({
+    PlaceFilters placeFilters = const PlaceFilters.clear(),
+  }) async {
+    final places = _placeRepository.getPlacesFromStorage(
+        categories: placeFilters.selectedCategories);
 
     return places;
   }

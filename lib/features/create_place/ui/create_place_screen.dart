@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interesting_places/component_library/component_library.dart';
+import 'package:interesting_places/domain_models/place_dm.dart';
 import 'package:interesting_places/features/create_place/bloc/create_place_bloc.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
@@ -85,6 +86,14 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
 
     return BlocBuilder<CreatePlaceBloc, CreatePlaceState>(
       builder: (context, state) {
+        //TODO danyaao Починить костыль
+        if (state.placeDM != null) {
+          closeCreatePlaceScreen(
+            placeDM: state.placeDM!,
+            context: context,
+          );
+        }
+
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -161,7 +170,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                     onPressed: () {},
                     child: Text(
                       l10n.pointOnTheMapButton,
-                      style: TextStyle(color: colors.secondary),
+                      style: TextStyle(color: colors.green),
                     ),
                   ),
                 ),
@@ -174,9 +183,7 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
                 BottomButton(
                   label: l10n.createButton,
                   onPressed: () {
-                    _bloc.add(SavePlaceEvent(
-                      context: context,
-                    ));
+                    _bloc.add(const SavePlaceEvent());
                   },
                   isActive: state.canCreate ?? false,
                 ),
@@ -186,5 +193,12 @@ class _CreatePlaceWidgetState extends State<CreatePlaceWidget> {
         );
       },
     );
+  }
+
+  void closeCreatePlaceScreen({
+    required PlaceDM placeDM,
+    required BuildContext context,
+  }) {
+    Navigator.pop(context, placeDM);
   }
 }

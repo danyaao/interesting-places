@@ -32,39 +32,40 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
               width: 300,
               height: 500,
               child: ListView.builder(
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedCategoryIndex = index;
-                        });
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(categories[index]),
-                            ),
-                            selectedCategoryIndex == index
-                                ? Expanded(
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.check,
-                                        color: colors.secondary,
-                                      ),
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedCategoryIndex = index;
+                      });
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(categories[index]),
+                          ),
+                          selectedCategoryIndex == index
+                              ? Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: colors.green,
                                     ),
-                                  )
-                                : const SizedBox(),
-                          ],
-                        ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
                       ),
-                    );
-                  }),
+                    ),
+                  );
+                },
+              ),
             ),
             BottomButton(
               onPressed: () =>
