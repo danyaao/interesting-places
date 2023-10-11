@@ -51,4 +51,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get newPlaceButton => 'НОВОЕ МЕСТО';
+
+  @override
+  String get somethingWentWrong => 'Что-то пошло не так';
+
+  @override
+  String get categoriesGridView => 'КАТЕГОРИИ';
+
+  @override
+  String get rangeSlider => 'Расстояние';
+
+  @override
+  String get fromToSlider => 'от 10 до 30 км';
+
+  @override
+  String get showButton => 'Показать';
+
+  @override
+  String get clearButton => 'Очистить';
 }

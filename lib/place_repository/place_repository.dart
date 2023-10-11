@@ -30,10 +30,17 @@ class PlaceRepository {
     }
   }
 
-  Future<List<PlaceDM>> getPlacesFromStorage() async {
+  Future<List<PlaceDM>> getPlacesFromStorage({
+    List<String>? categories,
+  }) async {
     final List<PlaceDM> placesDM = [];
 
-    final placesCM = await _sqlStorage.select(_sqlStorage.placeCMs).get();
+    final placesCMSelect = categories != null && categories.isNotEmpty
+        ? (_sqlStorage.select(_sqlStorage.placeCMs)
+          ..where((tbl) => tbl.category.isIn(categories)))
+        : (_sqlStorage.select(_sqlStorage.placeCMs));
+
+    final placesCM = await placesCMSelect.get();
 
     for (final placeCM in placesCM) {
       final placeId = placeCM.id;

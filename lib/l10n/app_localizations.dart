@@ -186,6 +186,42 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'НОВОЕ МЕСТО'**
   String get newPlaceButton;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In ru, this message translates to:
+  /// **'Что-то пошло не так'**
+  String get somethingWentWrong;
+
+  /// No description provided for @categoriesGridView.
+  ///
+  /// In ru, this message translates to:
+  /// **'КАТЕГОРИИ'**
+  String get categoriesGridView;
+
+  /// No description provided for @rangeSlider.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расстояние'**
+  String get rangeSlider;
+
+  /// No description provided for @fromToSlider.
+  ///
+  /// In ru, this message translates to:
+  /// **'от 10 до 30 км'**
+  String get fromToSlider;
+
+  /// No description provided for @showButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показать'**
+  String get showButton;
+
+  /// No description provided for @clearButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Очистить'**
+  String get clearButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

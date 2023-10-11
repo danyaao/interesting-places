@@ -25,17 +25,17 @@ class OutlinedForm extends StatelessWidget {
 
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(color: colors.onSecondary),
+      borderSide: BorderSide(color: colors.grey),
     );
 
     final activeBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(color: colors.secondary),
+      borderSide: BorderSide(color: colors.green),
     );
 
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(color: colors.danger),
+      borderSide: BorderSide(color: colors.red),
     );
 
     final decoration = InputDecoration(

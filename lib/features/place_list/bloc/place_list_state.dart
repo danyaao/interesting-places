@@ -17,12 +17,25 @@ class PlaceListFailureState extends PlaceListState {
 class PlaceListSuccessState extends PlaceListState {
   const PlaceListSuccessState({
     required this.places,
+    this.placeFilters = const PlaceFilters.clear(),
   });
 
   final List<PlaceDM> places;
+  final PlaceFilters placeFilters;
+
+  PlaceListSuccessState copyWith({
+    List<PlaceDM>? places,
+    PlaceFilters? placeFilters,
+  }) {
+    return PlaceListSuccessState(
+      places: places ?? this.places,
+      placeFilters: placeFilters ?? this.placeFilters,
+    );
+  }
 
   @override
   List<Object?> get props => [
         places,
+        placeFilters,
       ];
 }
