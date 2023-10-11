@@ -27,12 +27,15 @@ class PlaceListCreatePlaceEvent extends PlaceListEvent {
 class PlaceListFilterEvent extends PlaceListEvent {
   const PlaceListFilterEvent({
     required this.placeFilters,
+    required this.selectedIndexes,
   });
 
   final PlaceFilters placeFilters;
+  final List<int> selectedIndexes;
 
   @override
   List<Object?> get props => [
         placeFilters,
+        selectedIndexes,
       ];
 }

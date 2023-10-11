@@ -9,15 +9,21 @@ class FilterScreen extends StatelessWidget {
   const FilterScreen({
     super.key,
     required this.placeRepository,
+    required this.placeFilters,
+    required this.selectedIndexes,
   });
 
   final PlaceRepository placeRepository;
+  final PlaceFilters placeFilters;
+  final List<int> selectedIndexes;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FilterBloc>(
       create: (context) => FilterBloc(
         placeRepository: placeRepository,
+        initialPlaceFilters: placeFilters,
+        initialSelectedIndexes: selectedIndexes,
       ),
       child: const FilterWidget(),
     );
@@ -127,8 +133,11 @@ class _FilterWidgetState extends State<FilterWidget> {
                 BottomButton(
                   onPressed: () {
                     final placeFilters = state.placeFilters;
+                    final selectedIndexes = state.selectedIndexes;
+
                     closeFilterScreen(
                       placeFilters: placeFilters,
+                      selectedIndexes: selectedIndexes ?? [],
                       context: context,
                     );
                   },
@@ -147,8 +156,9 @@ class _FilterWidgetState extends State<FilterWidget> {
 
   void closeFilterScreen({
     required PlaceFilters placeFilters,
+    required List<int> selectedIndexes,
     required BuildContext context,
   }) {
-    Navigator.pop(context, placeFilters);
+    Navigator.pop(context, (placeFilters, selectedIndexes));
   }
 }

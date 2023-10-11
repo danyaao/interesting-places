@@ -12,8 +12,15 @@ part 'filter_state.dart';
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
   FilterBloc({
     required PlaceRepository placeRepository,
+    required PlaceFilters initialPlaceFilters,
+    required List<int> initialSelectedIndexes,
   })  : _placeRepository = placeRepository,
-        super(const FilterState()) {
+        super(
+          FilterState(
+            placeFilters: initialPlaceFilters,
+            selectedIndexes: initialSelectedIndexes,
+          ),
+        ) {
     _registerEventHandler();
     add(const FilterCountFilteredPlaces());
   }
@@ -97,7 +104,10 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     Emitter emitter,
   ) async {
     emitter(
-      state.copyWith(placeFilters: const PlaceFilters.clear()),
+      state.copyWith(
+        placeFilters: const PlaceFilters.clear(),
+        selectedIndexes: [],
+      ),
     );
     add(const FilterCountFilteredPlaces());
   }

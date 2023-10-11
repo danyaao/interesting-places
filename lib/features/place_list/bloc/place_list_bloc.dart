@@ -86,6 +86,7 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
         PlaceListSuccessState(
           places: currentState.places,
           placeFilters: event.placeFilters,
+          selectedFilterIndexes: event.selectedIndexes,
         ),
       );
     }

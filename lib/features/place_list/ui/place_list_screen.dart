@@ -66,16 +66,31 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
                     SearchForm(
                       controller: searchBarController,
                       onPressed: () async {
-                        final placeFilters = await openFilterPlaceScreen(
-                          placeRepository: context.read<PlaceRepository>(),
-                          context: context,
-                        );
+                        try {
+                          final filterResult = await openFilterPlaceScreen(
+                            placeRepository: context.read<PlaceRepository>(),
+                            context: context,
+                            currentPlaceFilters: state is PlaceListSuccessState
+                                ? state.placeFilters
+                                : const PlaceFilters.clear(),
+                            currentSelectedIndexes:
+                                state is PlaceListSuccessState
+                                    ? state.selectedFilterIndexes
+                                    : const [],
+                          );
 
-                        _bloc.add(
-                          PlaceListFilterEvent(
-                            placeFilters: placeFilters,
-                          ),
-                        );
+                          final placeFilters = filterResult.$1;
+                          final selectedIndexes = filterResult.$2;
+
+                          _bloc.add(
+                            PlaceListFilterEvent(
+                              placeFilters: placeFilters,
+                              selectedIndexes: selectedIndexes,
+                            ),
+                          );
+                        } catch (e) {
+                          print(e);
+                        }
                       },
                     ),
                     const SizedBox(height: 32),
@@ -145,17 +160,24 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
     return place;
   }
 
-  Future<PlaceFilters> openFilterPlaceScreen({
+  Future<(PlaceFilters, List<int>)> openFilterPlaceScreen({
     required PlaceRepository placeRepository,
     required BuildContext context,
+    required PlaceFilters currentPlaceFilters,
+    required List<int> currentSelectedIndexes,
   }) async {
-    final PlaceFilters places = await Navigator.push(
+    final (PlaceFilters places, List<int> selectedIndexes) =
+        await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FilterScreen(placeRepository: placeRepository),
+        builder: (context) => FilterScreen(
+          placeRepository: placeRepository,
+          placeFilters: currentPlaceFilters,
+          selectedIndexes: currentSelectedIndexes,
+        ),
       ),
     );
 
-    return places;
+    return (places, selectedIndexes);
   }
 }
