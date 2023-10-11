@@ -9,6 +9,11 @@ class PlaceFilters extends Equatable {
   final List<String> selectedCategories;
   final (double, double) rangeValues;
 
+  bool get isFiltering =>
+      selectedCategories.isNotEmpty ||
+      rangeValues.$1 != 10 ||
+      rangeValues.$2 != 30;
+
   PlaceFilters copyWith({
     List<String>? selectedCategories,
     (double, double)? rangeValues,

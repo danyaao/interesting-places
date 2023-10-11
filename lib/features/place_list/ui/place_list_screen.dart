@@ -65,6 +65,9 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
                   children: [
                     SearchForm(
                       controller: searchBarController,
+                      isFiltered: state is PlaceListSuccessState
+                          ? state.placeFilters.isFiltering
+                          : false,
                       onPressed: () async {
                         try {
                           final filterResult = await openFilterPlaceScreen(
@@ -89,7 +92,7 @@ class _PlaceListWidgetState extends State<PlaceListWidget> {
                             ),
                           );
                         } catch (e) {
-                          print(e);
+                          rethrow;
                         }
                       },
                     ),

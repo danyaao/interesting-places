@@ -6,10 +6,12 @@ class SearchForm extends StatelessWidget {
     super.key,
     required this.controller,
     required this.onPressed,
+    required this.isFiltered,
   });
 
   final TextEditingController controller;
   final VoidCallback onPressed;
+  final bool isFiltered;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,10 @@ class SearchForm extends StatelessWidget {
     );
 
     final inputDecoration = InputDecoration(
-      prefixIcon: const Icon(Icons.search),
+      prefixIcon: Icon(
+        Icons.search,
+        color: colors.grey,
+      ),
       fillColor: colors.lightGrey,
       filled: true,
       hintText: l10n.searchBarTextFieldHint,
@@ -32,7 +37,7 @@ class SearchForm extends StatelessWidget {
       suffixIcon: IconButton(
         icon: Icon(
           Icons.filter_alt_outlined,
-          color: colors.green,
+          color: isFiltered ? colors.green : colors.grey,
         ),
         onPressed: onPressed,
       ),
