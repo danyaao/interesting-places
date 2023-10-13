@@ -2,7 +2,7 @@ part of 'filter_bloc.dart';
 
 class FilterState extends Equatable {
   const FilterState({
-    this.placeFilters = const PlaceFilters.clear(),
+    this.placeFilters = const PlaceFilters.initial(),
     this.filteredPlacesCount,
     this.selectedIndexes,
   });

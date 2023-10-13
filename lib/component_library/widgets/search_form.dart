@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/component_library/component_library.dart';
 
 class SearchForm extends StatelessWidget {
@@ -25,19 +26,28 @@ class SearchForm extends StatelessWidget {
     );
 
     final inputDecoration = InputDecoration(
-      prefixIcon: Icon(
-        Icons.search,
-        color: colors.grey,
+      prefixIcon: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: SvgPicture.asset(
+          AppAssets.iconSearch,
+          colorFilter: ColorFilter.mode(
+            colors.grey,
+            BlendMode.srcIn,
+          ),
+        ),
       ),
       fillColor: colors.lightGrey,
       filled: true,
-      hintText: l10n.searchBarTextFieldHint,
+      hintText: l10n.searchBarTextFieldHint.capitalize(),
       hintStyle: text.text.copyWith(color: colors.grey),
       contentPadding: const EdgeInsets.symmetric(vertical: 0),
       suffixIcon: IconButton(
-        icon: Icon(
-          Icons.filter_alt_outlined,
-          color: isFiltered ? colors.green : colors.grey,
+        icon: SvgPicture.asset(
+          AppAssets.iconFilter,
+          colorFilter: ColorFilter.mode(
+            isFiltered ? colors.green : colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
         onPressed: onPressed,
       ),

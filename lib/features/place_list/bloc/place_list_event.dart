@@ -13,14 +13,14 @@ class PlaceListRefreshEvent extends PlaceListEvent {
 
 class PlaceListCreatePlaceEvent extends PlaceListEvent {
   const PlaceListCreatePlaceEvent({
-    required this.placeDM,
+    required this.place,
   });
 
-  final PlaceDM placeDM;
+  final Place place;
 
   @override
   List<Object?> get props => [
-        placeDM,
+        place,
       ];
 }
 

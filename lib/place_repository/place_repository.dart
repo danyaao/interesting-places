@@ -1,6 +1,6 @@
-import 'package:interesting_places/domain_models/place_dm.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 import 'package:interesting_places/place_repository/mappers/cache_to_domain.dart';
-import 'package:interesting_places/storage/sql_storage/sql_storage.dart';
+import 'package:interesting_places/storage/storage.dart';
 
 class PlaceRepository {
   PlaceRepository({
@@ -9,12 +9,12 @@ class PlaceRepository {
 
   final SqlStorage _sqlStorage;
 
-  Future<void> insertPlace(PlaceDM placeDM) async {
+  Future<void> insertPlace(Place placeDM) async {
     final placeId = await _sqlStorage.into(_sqlStorage.placeCMs).insert(
           PlaceCMsCompanion.insert(
             name: placeDM.name,
-            category: placeDM.category,
-            description: placeDM.description ?? '',
+            category: placeDM.category.toString(),
+            description: placeDM.description,
             latitude: placeDM.latitude,
             longitude: placeDM.longitude,
           ),
@@ -30,10 +30,10 @@ class PlaceRepository {
     }
   }
 
-  Future<List<PlaceDM>> getPlacesFromStorage({
+  Future<List<Place>> getPlacesFromStorage({
     List<String>? categories,
   }) async {
-    final List<PlaceDM> placesDM = [];
+    final List<Place> placesDM = [];
 
     final placesCMSelect = categories != null && categories.isNotEmpty
         ? (_sqlStorage.select(_sqlStorage.placeCMs)

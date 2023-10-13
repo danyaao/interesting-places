@@ -39,14 +39,14 @@ class NameChangedEvent extends CreatePlaceEvent {
 
 class SelectCategoryEvent extends CreatePlaceEvent {
   const SelectCategoryEvent({
-    required this.context,
+    required this.selectedCategory,
   });
 
-  final BuildContext context;
+  final PlaceCategory selectedCategory;
 
   @override
   List<Object?> get props => [
-        context,
+        selectedCategory,
       ];
 }
 

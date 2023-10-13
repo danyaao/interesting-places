@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/component_library/component_library.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 
 class FilterGrid extends StatelessWidget {
   const FilterGrid({
     super.key,
-    required this.items,
     required this.selectedIndexes,
-    required this.name,
+    required this.label,
     required this.onTap,
   });
 
-  final List<(IconData, String)> items;
   final List<int> selectedIndexes;
-  final String name;
+  final String label;
   final ValueSetter onTap;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final text = context.text;
     final colors = context.colors;
 
@@ -25,7 +26,7 @@ class FilterGrid extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            name,
+            label.toUpperCase(),
             style: text.superSmall,
           ),
         ),
@@ -34,12 +35,10 @@ class FilterGrid extends StatelessWidget {
           height: 250,
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 150),
-            itemCount: items.length,
+              maxCrossAxisExtent: 150,
+            ),
+            itemCount: PlaceCategory.values.length,
             itemBuilder: (context, index) {
-              final itemIconData = items[index].$1;
-              final itemName = items[index].$2;
-
               return Column(
                 children: [
                   InkWell(
@@ -55,9 +54,12 @@ class FilterGrid extends StatelessWidget {
                       child: Stack(
                         children: [
                           Center(
-                            child: Icon(
-                              itemIconData,
-                              color: colors.green,
+                            child: SvgPicture.asset(
+                              PlaceCategory.values[index].iconPath,
+                              colorFilter: ColorFilter.mode(
+                                colors.green,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                           selectedIndexes.contains(index)
@@ -71,7 +73,12 @@ class FilterGrid extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text(itemName),
+                  Text(
+                    PlaceCategory.values[index]
+                        .getPlaceCategoryName(l10n)
+                        .capitalize(),
+                    style: text.superSmall,
+                  ),
                 ],
               );
             },

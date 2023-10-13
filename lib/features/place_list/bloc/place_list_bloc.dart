@@ -1,9 +1,6 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:interesting_places/domain_models/place_dm.dart';
-import 'package:interesting_places/domain_models/place_filters.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 part 'place_list_event.dart';
@@ -61,14 +58,14 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
   ) async {
     final currentState = state;
 
-    final List<PlaceDM> newPlaces = [];
+    final List<Place> newPlaces = [];
 
     switch (currentState) {
       case PlaceListSuccessState():
         newPlaces.addAll(currentState.places.toList());
-        newPlaces.add(event.placeDM);
+        newPlaces.add(event.place);
       default:
-        newPlaces.add(event.placeDM);
+        newPlaces.add(event.place);
     }
 
     emitter(
@@ -94,11 +91,13 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     add(const PlaceListRefreshEvent());
   }
 
-  Future<List<PlaceDM>> _loadPlaces({
-    PlaceFilters placeFilters = const PlaceFilters.clear(),
+  Future<List<Place>> _loadPlaces({
+    PlaceFilters placeFilters = const PlaceFilters.initial(),
   }) async {
     final places = _placeRepository.getPlacesFromStorage(
-        categories: placeFilters.selectedCategories);
+      categories:
+          placeFilters.selectedCategories.map((e) => e.toString()).toList(),
+    );
 
     return places;
   }

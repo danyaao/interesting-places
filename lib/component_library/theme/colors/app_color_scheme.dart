@@ -20,7 +20,6 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
 
   final Color lightGrey;
 
-
   AppColorScheme.light()
       : green = LightColorPalette.green,
         yellow = LightColorPalette.yellow,
@@ -70,8 +69,10 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
   }
 
   @override
-  ThemeExtension<AppColorScheme> lerp(ThemeExtension<AppColorScheme>? other,
-      double t,) {
+  ThemeExtension<AppColorScheme> lerp(
+    ThemeExtension<AppColorScheme>? other,
+    double t,
+  ) {
     if (other is! AppColorScheme) {
       return this;
     }

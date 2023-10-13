@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:interesting_places/storage/sql_storage/tables/image_cm.dart';
-import 'package:interesting_places/storage/sql_storage/tables/place_cm.dart';
+import 'package:interesting_places/storage/storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 

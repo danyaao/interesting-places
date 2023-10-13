@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:interesting_places/domain_models/place_dm.dart';
-import 'package:interesting_places/features/create_place/ui/select_category_screen.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 part 'create_place_event.dart';
@@ -17,7 +15,7 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
   CreatePlaceBloc({
     required PlaceRepository placeRepository,
   })  : _placeRepository = placeRepository,
-        super(CreatePlaceState()) {
+        super(CreatePlaceInProgressState()) {
     _registerEventHandler();
   }
 
@@ -33,6 +31,8 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
             await _handleDeleteImageFromSelectionEvent(emitter, event);
           case NameChangedEvent():
             await _handleNameChangedEvent(emitter, event);
+          case DescriptionChangedEvent():
+            await _handleDescriptionChangedEvent(emitter, event);
           case LatitudeChangedEvent():
             await _handleLatitudeChangedEvent(emitter, event);
           case LongitudeChangedEvent():
@@ -49,39 +49,65 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
   Future<void> _handlePickImagesFromGalleryEvent(
     Emitter emitter,
   ) async {
-    final newImages = await _getImageFromGallery();
-    newImages.addAll(state.images ?? []);
+    final currentState = state;
 
-    emitter(state.copyWith(
-      images: newImages,
-    ));
+    final newImages = await _getImagesFromGallery();
+
+    if (currentState is CreatePlaceInProgressState) {
+      final images = currentState.images?.toList() ?? [];
+      images.addAll(newImages);
+
+      emitter(currentState.copyWith(
+        images: images,
+      ));
+    }
   }
 
   Future<void> _handleDeleteImageFromSelectionEvent(
     Emitter emitter,
     DeleteImageFromSelectionEvent event,
   ) async {
-    final newImages = state.images!.toList();
-    newImages.removeAt(event.index);
+    final currentState = state;
 
-    emitter(state.copyWith(
-      images: newImages,
-    ));
+    if (currentState is CreatePlaceInProgressState) {
+      final newImages = currentState.images!.toList();
+
+      newImages.removeAt(event.index);
+
+      emitter(currentState.copyWith(
+        images: newImages,
+      ));
+    }
   }
 
   Future<void> _handleNameChangedEvent(
     Emitter emitter,
     NameChangedEvent event,
   ) async {
-    if (event.name.length < 3) {
-      emitter(state.copyWith(
-        isNameValid: false,
-      ));
-    } else {
-      emitter(state.copyWith(
-        name: event.name,
-        isNameValid: true,
-      ));
+    final currentState = state;
+
+    if (currentState is CreatePlaceInProgressState) {
+      if (event.name.length < 3) {
+        emitter(currentState.copyWith(
+          isNameValid: false,
+        ));
+      } else {
+        emitter(currentState.copyWith(
+          name: event.name,
+          isNameValid: true,
+        ));
+      }
+    }
+  }
+
+  Future<void> _handleDescriptionChangedEvent(
+    Emitter emitter,
+    DescriptionChangedEvent event,
+  ) async {
+    final currentState = state;
+
+    if (currentState is CreatePlaceInProgressState) {
+      emitter(currentState.copyWith(description: event.description));
     }
   }
 
@@ -89,15 +115,19 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
     Emitter emitter,
     LatitudeChangedEvent event,
   ) async {
-    if (double.tryParse(event.latitude) == null) {
-      emitter(state.copyWith(
-        isLatitudeValid: false,
-      ));
-    } else {
-      emitter(state.copyWith(
-        latitude: event.latitude,
-        isLatitudeValid: true,
-      ));
+    final currentState = state;
+
+    if (currentState is CreatePlaceInProgressState) {
+      if (double.tryParse(event.latitude) == null) {
+        emitter(currentState.copyWith(
+          isLatitudeValid: false,
+        ));
+      } else {
+        emitter(currentState.copyWith(
+          latitude: event.latitude,
+          isLatitudeValid: true,
+        ));
+      }
     }
   }
 
@@ -105,15 +135,19 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
     Emitter emitter,
     LongitudeChangedEvent event,
   ) async {
-    if (double.tryParse(event.longitude) == null) {
-      emitter(state.copyWith(
-        isLongitudeValid: false,
-      ));
-    } else {
-      emitter(state.copyWith(
-        latitude: event.longitude,
-        isLongitudeValid: true,
-      ));
+    final currentState = state;
+
+    if (currentState is CreatePlaceInProgressState) {
+      if (double.tryParse(event.longitude) == null) {
+        emitter(currentState.copyWith(
+          isLongitudeValid: false,
+        ));
+      } else {
+        emitter(currentState.copyWith(
+          longitude: event.longitude,
+          isLongitudeValid: true,
+        ));
+      }
     }
   }
 
@@ -121,40 +155,55 @@ class CreatePlaceBloc extends Bloc<CreatePlaceEvent, CreatePlaceState> {
     Emitter emitter,
     SelectCategoryEvent event,
   ) async {
-    final context = event.context;
-    final selectedCategory = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SelectCategoryScreen()),
-    );
+    final currentState = state;
 
-    emitter(state.copyWith(
-      category: selectedCategory,
-    ));
+    if (currentState is CreatePlaceInProgressState) {
+      emitter(currentState.copyWith(
+        category: event.selectedCategory,
+      ));
+    }
   }
 
   Future<void> _handleSavePlaceEvent(
     Emitter emitter,
     SavePlaceEvent event,
   ) async {
-    try {
-      final placeDM = PlaceDM(
-        name: state.name!,
-        category: state.category!,
-        description: state.description,
-        latitude: double.tryParse(state.latitude ?? '0')!,
-        longitude: double.tryParse(state.longitude ?? '0')!,
-        images: state.images!,
-      );
+    final currentState = state;
 
-      await _placeRepository.insertPlace(placeDM);
+    if (currentState is CreatePlaceInProgressState) {
+      final currentName = currentState.name;
+      final currentCategory = currentState.category;
+      final currentLatitude = currentState.latitude;
+      final currentLongitude = currentState.longitude;
+      final currentImages = currentState.images;
 
-      emitter(state.copyWith(placeDM: placeDM));
-    } catch (e) {
-      rethrow;
+      if (currentName != null &&
+          currentCategory != null &&
+          currentLatitude != null &&
+          double.tryParse(currentLatitude) != null &&
+          currentLongitude != null &&
+          double.tryParse(currentLongitude) != null &&
+          currentImages != null &&
+          currentImages.isNotEmpty) {
+        final place = Place(
+          name: currentName,
+          category: currentCategory,
+          description: currentState.description ?? '',
+          latitude: double.tryParse(currentLatitude)!,
+          longitude: double.tryParse(currentLongitude)!,
+          images: currentImages,
+        );
+
+        await _placeRepository.insertPlace(place);
+
+        emitter(
+          CreatePlaceSuccessState(place: place),
+        );
+      }
     }
   }
 
-  Future<List<Uint8List>> _getImageFromGallery() async {
+  Future<List<Uint8List>> _getImagesFromGallery() async {
     final xFiles = await ImagePicker().pickMultiImage();
     final images = xFiles.map((e) => File(e.path).readAsBytesSync()).toList();
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interesting_places/component_library/component_library.dart';
-import 'package:interesting_places/domain_models/place_filters.dart';
-import 'package:interesting_places/features/filter/bloc/filter_bloc.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
+import 'package:interesting_places/features/filter/filter.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 class FilterScreen extends StatelessWidget {
@@ -45,16 +45,6 @@ class _FilterWidgetState extends State<FilterWidget> {
     final l10n = context.l10n;
     final text = context.text;
     final colors = context.colors;
-    final categories = l10n.categories.split(';');
-
-    final List<(IconData, String)> items = [
-      (Icons.movie_outlined, categories[0]),
-      (Icons.restaurant, categories[1]),
-      (Icons.star_outline, categories[2]),
-      (Icons.theater_comedy_outlined, categories[3]),
-      (Icons.museum_outlined, categories[4]),
-      (Icons.local_cafe_outlined, categories[5]),
-    ];
 
     return BlocBuilder<FilterBloc, FilterState>(
       builder: (context, state) {
@@ -83,14 +73,12 @@ class _FilterWidgetState extends State<FilterWidget> {
               children: [
                 const SizedBox(height: 24),
                 FilterGrid(
-                  items: items,
                   selectedIndexes: state.selectedIndexes ?? [],
-                  name: l10n.categoriesGridView,
+                  label: l10n.categoriesGridView,
                   onTap: (index) {
                     _bloc.add(
                       FilterCategorySelectedEvent(
                         selectedIndex: index,
-                        categories: categories,
                       ),
                     );
                   },
@@ -130,6 +118,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     ),
                   ],
                 ),
+                const Spacer(),
                 BottomButton(
                   onPressed: () {
                     final placeFilters = state.placeFilters;
