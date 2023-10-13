@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:interesting_places/component_library/component_library.dart';
-import 'package:interesting_places/domain_models/place_dm.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
+import 'package:interesting_places/features/place_details/place_details.dart';
 
 class PlaceListListView extends StatelessWidget {
   const PlaceListListView({
@@ -8,7 +9,7 @@ class PlaceListListView extends StatelessWidget {
     required this.places,
   });
 
-  final List<PlaceDM> places;
+  final List<Place> places;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,17 @@ class PlaceListListView extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         return PlaceCard(
-          placeDM: places[index],
+          place: places[index],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlaceDetailsScreen(
+                  place: places[index],
+                ),
+              ),
+            );
+          },
         );
       },
     );

@@ -20,8 +20,8 @@ class OutlinedForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final text = context.text;
+    final colors = context.colors;
 
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
@@ -51,7 +51,7 @@ class OutlinedForm extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            label,
+            label.toUpperCase(),
             style: text.superSmall,
           ),
         ),

@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/component_library/component_library.dart';
-import 'package:interesting_places/domain_models/place_dm.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({
     super.key,
-    required this.placeDM,
+    required this.place,
+    required this.onTap,
   });
 
-  final PlaceDM placeDM;
+  final Place place;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final text = context.text;
     final colors = context.colors;
 
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
       child: Stack(
         children: [
           SizedBox(
@@ -25,7 +30,7 @@ class PlaceCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.memory(
-                placeDM.images.first,
+                place.images.first,
                 fit: BoxFit.cover,
               ),
             ),
@@ -46,7 +51,7 @@ class PlaceCard extends StatelessWidget {
                             left: 16,
                           ),
                           child: Text(
-                            placeDM.category.toLowerCase(),
+                            place.category.getPlaceCategoryName(l10n),
                             style: text.smallBold.copyWith(
                               color: colors.white,
                             ),
@@ -59,9 +64,8 @@ class PlaceCard extends StatelessWidget {
                             top: 16,
                           ),
                           child: InkWell(
-                            child: Icon(
-                              Icons.favorite_outline,
-                              color: colors.white,
+                            child: SvgPicture.asset(
+                              AppAssets.iconFavouriteOutline,
                             ),
                             onTap: () {},
                           ),
@@ -83,20 +87,26 @@ class PlaceCard extends StatelessWidget {
                       width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            children: [
-                              Text(
-                                placeDM.name,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                place.name,
                                 style: text.text,
                               ),
-                              Text(
-                                placeDM.description ?? '',
-                                style: text.superSmall,
+                            ),
+                            const SizedBox(height: 4),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                place.description,
+                                style: text.small.copyWith(
+                                  color: colors.grey,
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

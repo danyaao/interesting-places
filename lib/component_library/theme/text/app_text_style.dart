@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interesting_places/component_library/component_library.dart';
 
 enum AppTextStyle {
   largeTitle(
@@ -48,7 +49,7 @@ enum AppTextStyle {
       fontSize: 12,
       fontWeight: FontWeight.w400,
       fontFamily: 'Roboto',
-      color: Color(0x8F7C7E92),
+      color: LightColorPalette.grey,
     ),
   ),
   button(

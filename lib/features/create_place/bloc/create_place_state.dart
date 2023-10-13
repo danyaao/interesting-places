@@ -1,7 +1,9 @@
 part of 'create_place_bloc.dart';
 
-class CreatePlaceState extends Equatable {
-  CreatePlaceState({
+sealed class CreatePlaceState extends Equatable {}
+
+class CreatePlaceInProgressState extends CreatePlaceState {
+  CreatePlaceInProgressState({
     this.name,
     this.isNameValid,
     this.category,
@@ -11,16 +13,15 @@ class CreatePlaceState extends Equatable {
     this.longitude,
     this.isLongitudeValid,
     this.images,
-    this.placeDM,
   }) : canCreate = (images?.isNotEmpty ?? false) &&
             (isNameValid ?? false) &&
             (isLatitudeValid ?? false) &&
             (isLongitudeValid ?? false) &&
-            (category?.isNotEmpty ?? false);
+            (category != null);
 
   final String? name;
   final bool? isNameValid;
-  final String? category;
+  final PlaceCategory? category;
   final String? description;
   final String? latitude;
   final bool? isLatitudeValid;
@@ -28,21 +29,19 @@ class CreatePlaceState extends Equatable {
   final bool? isLongitudeValid;
   final List<Uint8List>? images;
   final bool? canCreate;
-  final PlaceDM? placeDM;
 
-  CreatePlaceState copyWith({
+  CreatePlaceInProgressState copyWith({
     String? name,
     bool? isNameValid,
-    String? category,
+    PlaceCategory? category,
     String? description,
     String? latitude,
     bool? isLatitudeValid,
     String? longitude,
     bool? isLongitudeValid,
     List<Uint8List>? images,
-    PlaceDM? placeDM,
   }) {
-    return CreatePlaceState(
+    return CreatePlaceInProgressState(
       name: name ?? this.name,
       isNameValid: isNameValid ?? this.isNameValid,
       category: category ?? this.category,
@@ -52,7 +51,6 @@ class CreatePlaceState extends Equatable {
       longitude: longitude ?? this.longitude,
       isLongitudeValid: isLongitudeValid ?? this.isLongitudeValid,
       images: images ?? this.images,
-      placeDM: placeDM ?? this.placeDM,
     );
   }
 
@@ -68,6 +66,18 @@ class CreatePlaceState extends Equatable {
         isLongitudeValid,
         canCreate,
         images,
-        placeDM,
+      ];
+}
+
+class CreatePlaceSuccessState extends CreatePlaceState {
+  CreatePlaceSuccessState({
+    required this.place,
+  });
+
+  final Place place;
+
+  @override
+  List<Object?> get props => [
+        place,
       ];
 }

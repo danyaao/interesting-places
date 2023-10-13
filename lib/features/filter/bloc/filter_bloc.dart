@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:interesting_places/domain_models/place_filters.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 import 'package:interesting_places/place_repository/place_repository.dart';
 
 part 'filter_event.dart';
@@ -54,11 +54,17 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
         state.placeFilters.selectedCategories.toList();
     final newSelectedIndexes = state.selectedIndexes?.toList() ?? [];
 
-    if (newSelectedCategories.contains(event.categories[event.selectedIndex])) {
-      newSelectedCategories.remove(event.categories[event.selectedIndex]);
+    if (newSelectedCategories.contains(
+      PlaceCategory.values[event.selectedIndex],
+    )) {
+      newSelectedCategories.remove(
+        PlaceCategory.values[event.selectedIndex],
+      );
       newSelectedIndexes.remove(event.selectedIndex);
     } else {
-      newSelectedCategories.add(event.categories[event.selectedIndex]);
+      newSelectedCategories.add(
+        PlaceCategory.values[event.selectedIndex],
+      );
       newSelectedIndexes.add(event.selectedIndex);
     }
 
@@ -86,6 +92,8 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     final places = await _placeRepository.getPlacesFromStorage(
       categories: state.placeFilters.selectedCategories.isNotEmpty
           ? state.placeFilters.selectedCategories
+              .map((e) => e.toString())
+              .toList()
           : null,
     );
 
@@ -105,7 +113,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   ) async {
     emitter(
       state.copyWith(
-        placeFilters: const PlaceFilters.clear(),
+        placeFilters: const PlaceFilters.initial(),
         selectedIndexes: [],
       ),
     );

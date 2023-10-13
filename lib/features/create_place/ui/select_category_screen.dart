@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/component_library/component_library.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 
 class SelectCategoryScreen extends StatefulWidget {
   const SelectCategoryScreen({
@@ -16,9 +18,9 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final text = context.text;
     final theme = context.theme;
     final colors = context.colors;
-    final categories = l10n.categories.split(';');
 
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +34,7 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
               width: 300,
               height: 500,
               child: ListView.builder(
-                itemCount: categories.length,
+                itemCount: PlaceCategory.values.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
@@ -47,15 +49,23 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
                         children: [
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(categories[index]),
+                            child: Text(
+                              PlaceCategory.values[index]
+                                  .getPlaceCategoryName(l10n)
+                                  .capitalize(),
+                              style: text.text,
+                            ),
                           ),
                           selectedCategoryIndex == index
                               ? Expanded(
                                   child: Align(
                                     alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.check,
-                                      color: colors.green,
+                                    child: SvgPicture.asset(
+                                      AppAssets.iconCheck,
+                                      colorFilter: ColorFilter.mode(
+                                        colors.green,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
                                 )
@@ -67,9 +77,12 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
                 },
               ),
             ),
+            const Spacer(),
             BottomButton(
-              onPressed: () =>
-                  Navigator.pop(context, categories[selectedCategoryIndex!]),
+              onPressed: () => Navigator.pop(
+                context,
+                PlaceCategory.values[selectedCategoryIndex!],
+              ),
               label: l10n.saveButton,
               isActive: selectedCategoryIndex != null,
             ),

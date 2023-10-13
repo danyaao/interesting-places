@@ -1,15 +1,17 @@
 import 'dart:typed_data';
 
-import 'package:interesting_places/domain_models/place_dm.dart';
-import 'package:interesting_places/storage/sql_storage/sql_storage.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
+import 'package:interesting_places/storage/storage.dart';
 
 extension PlaceCacheToDomain on PlaceCM {
-  PlaceDM toDomainModel({
+  Place toDomainModel({
     required List<Uint8List> images,
   }) {
-    return PlaceDM(
+    return Place(
       name: name,
-      category: category,
+      category: PlaceCategory.values.firstWhere(
+        (e) => e.toString() == category,
+      ),
       description: description,
       latitude: latitude,
       longitude: longitude,

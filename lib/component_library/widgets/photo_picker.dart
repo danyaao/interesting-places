@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/component_library/component_library.dart';
 
 class PhotoPicker extends StatelessWidget {
@@ -34,10 +35,14 @@ class PhotoPicker extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child: Icon(
-              Icons.add,
-              color: colors.green,
-              size: 40,
+            child: SvgPicture.asset(
+              AppAssets.iconAdd,
+              colorFilter: ColorFilter.mode(
+                colors.green,
+                BlendMode.srcIn,
+              ),
+              width: 36,
+              height: 36,
             ),
           ),
         ),
@@ -74,9 +79,8 @@ class PhotoPicker extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 4, top: 4),
                         child: InkWell(
                           onTap: () => delete(index),
-                          child: Icon(
-                            Icons.cancel,
-                            color: colors.white,
+                          child: SvgPicture.asset(
+                            AppAssets.iconClear,
                           ),
                         ),
                       ),

@@ -7,16 +7,13 @@ abstract class FilterEvent extends Equatable {
 class FilterCategorySelectedEvent extends FilterEvent {
   const FilterCategorySelectedEvent({
     required this.selectedIndex,
-    required this.categories,
   });
 
   final int selectedIndex;
-  final List<String> categories;
 
   @override
   List<Object?> get props => [
         selectedIndex,
-        categories,
       ];
 }
 

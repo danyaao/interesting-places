@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:interesting_places/domain_models/domain_models.dart';
 
 class PlaceFilters extends Equatable {
   const PlaceFilters({
@@ -6,7 +7,7 @@ class PlaceFilters extends Equatable {
     required this.rangeValues,
   });
 
-  final List<String> selectedCategories;
+  final List<PlaceCategory> selectedCategories;
   final (double, double) rangeValues;
 
   bool get isFiltering =>
@@ -15,7 +16,7 @@ class PlaceFilters extends Equatable {
       rangeValues.$2 != 30;
 
   PlaceFilters copyWith({
-    List<String>? selectedCategories,
+    List<PlaceCategory>? selectedCategories,
     (double, double)? rangeValues,
   }) {
     return PlaceFilters(
@@ -23,7 +24,7 @@ class PlaceFilters extends Equatable {
         rangeValues: rangeValues ?? this.rangeValues);
   }
 
-  const PlaceFilters.clear()
+  const PlaceFilters.initial()
       : selectedCategories = const [],
         rangeValues = (10, 30);
 

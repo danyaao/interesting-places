@@ -94,115 +94,145 @@ abstract class AppLocalizations {
   /// No description provided for @newPlaceAppBar.
   ///
   /// In ru, this message translates to:
-  /// **'Новое место'**
+  /// **'новое место'**
   String get newPlaceAppBar;
 
   /// No description provided for @cancelAppBar.
   ///
   /// In ru, this message translates to:
-  /// **'Отмена'**
+  /// **'отмена'**
   String get cancelAppBar;
 
   /// No description provided for @categoryButton.
   ///
   /// In ru, this message translates to:
-  /// **'КАТЕГОРИЯ'**
+  /// **'категория'**
   String get categoryButton;
 
   /// No description provided for @unselectedButton.
   ///
   /// In ru, this message translates to:
-  /// **'Не выбрано'**
+  /// **'не выбрано'**
   String get unselectedButton;
 
   /// No description provided for @placeNameTextField.
   ///
   /// In ru, this message translates to:
-  /// **'НАЗВАНИЕ'**
+  /// **'название'**
   String get placeNameTextField;
 
   /// No description provided for @latitudeTextField.
   ///
   /// In ru, this message translates to:
-  /// **'ШИРОТА'**
+  /// **'широта'**
   String get latitudeTextField;
 
   /// No description provided for @longitudeTextField.
   ///
   /// In ru, this message translates to:
-  /// **'ДОЛГОТА'**
+  /// **'долгота'**
   String get longitudeTextField;
 
   /// No description provided for @pointOnTheMapButton.
   ///
   /// In ru, this message translates to:
-  /// **'Указать на карте'**
+  /// **'указать на карте'**
   String get pointOnTheMapButton;
 
   /// No description provided for @descriptionTextField.
   ///
   /// In ru, this message translates to:
-  /// **'ОПИСАНИЕ'**
+  /// **'описание'**
   String get descriptionTextField;
 
   /// No description provided for @createButton.
   ///
   /// In ru, this message translates to:
-  /// **'СОЗДАТЬ'**
+  /// **'создать'**
   String get createButton;
 
   /// No description provided for @saveButton.
   ///
   /// In ru, this message translates to:
-  /// **'СОХРАНИТЬ'**
+  /// **'сохранить'**
   String get saveButton;
 
   /// No description provided for @categoryAppBar.
   ///
   /// In ru, this message translates to:
-  /// **'Категория'**
+  /// **'категория'**
   String get categoryAppBar;
 
-  /// No description provided for @categories.
+  /// No description provided for @hotelCategory.
   ///
   /// In ru, this message translates to:
-  /// **'Кинотеатр;Ресторан;Особое место;Театр;Музей;Кафе'**
-  String get categories;
+  /// **'отель'**
+  String get hotelCategory;
+
+  /// No description provided for @restaurantCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'ресторан'**
+  String get restaurantCategory;
+
+  /// No description provided for @specialPlaceCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'особое место'**
+  String get specialPlaceCategory;
+
+  /// No description provided for @parkCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'парк'**
+  String get parkCategory;
+
+  /// No description provided for @museumCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'музей'**
+  String get museumCategory;
+
+  /// No description provided for @cafeCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'кафе'**
+  String get cafeCategory;
 
   /// No description provided for @placeListAppBar.
   ///
   /// In ru, this message translates to:
-  /// **'Список интересных мест'**
+  /// **'список интересных мест'**
   String get placeListAppBar;
 
   /// No description provided for @searchBarTextFieldHint.
   ///
   /// In ru, this message translates to:
-  /// **'Поиск'**
+  /// **'поиск'**
   String get searchBarTextFieldHint;
 
   /// No description provided for @newPlaceButton.
   ///
   /// In ru, this message translates to:
-  /// **'НОВОЕ МЕСТО'**
+  /// **'новое место'**
   String get newPlaceButton;
 
   /// No description provided for @somethingWentWrong.
   ///
   /// In ru, this message translates to:
-  /// **'Что-то пошло не так'**
+  /// **'что-то пошло не так'**
   String get somethingWentWrong;
 
   /// No description provided for @categoriesGridView.
   ///
   /// In ru, this message translates to:
-  /// **'КАТЕГОРИИ'**
+  /// **'категории'**
   String get categoriesGridView;
 
   /// No description provided for @rangeSlider.
   ///
   /// In ru, this message translates to:
-  /// **'Расстояние'**
+  /// **'расстояние'**
   String get rangeSlider;
 
   /// No description provided for @fromToSlider.
@@ -214,14 +244,32 @@ abstract class AppLocalizations {
   /// No description provided for @showButton.
   ///
   /// In ru, this message translates to:
-  /// **'Показать'**
+  /// **'показать'**
   String get showButton;
 
   /// No description provided for @clearButton.
   ///
   /// In ru, this message translates to:
-  /// **'Очистить'**
+  /// **'очистить'**
   String get clearButton;
+
+  /// No description provided for @buildRouteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'построить маршрут'**
+  String get buildRouteButton;
+
+  /// No description provided for @scheduleButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'запланировать'**
+  String get scheduleButton;
+
+  /// No description provided for @favouriteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'в избранное'**
+  String get favouriteButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

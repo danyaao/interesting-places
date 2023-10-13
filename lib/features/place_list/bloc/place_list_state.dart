@@ -17,16 +17,16 @@ class PlaceListFailureState extends PlaceListState {
 class PlaceListSuccessState extends PlaceListState {
   const PlaceListSuccessState({
     required this.places,
-    this.placeFilters = const PlaceFilters.clear(),
+    this.placeFilters = const PlaceFilters.initial(),
     this.selectedFilterIndexes = const [],
   });
 
-  final List<PlaceDM> places;
+  final List<Place> places;
   final PlaceFilters placeFilters;
   final List<int> selectedFilterIndexes;
 
   PlaceListSuccessState copyWith({
-    List<PlaceDM>? places,
+    List<Place>? places,
     PlaceFilters? placeFilters,
     List<int>? selectedFilterIndexes,
   }) {

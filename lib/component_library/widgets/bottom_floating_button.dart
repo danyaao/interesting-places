@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:interesting_places/component_library/component_library.dart';
 
 class BottomFloatingButton extends StatelessWidget {
   const BottomFloatingButton({
     super.key,
-    required this.label,
     required this.onPressed,
+    required this.label,
   });
 
-  final String label;
   final VoidCallback onPressed;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
+    final text = context.text;
+    final colors = context.colors;
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: Container(
-          width: 220,
           height: 48,
+          width: 178,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [
-                Color(0xFFD3D241),
-                Color(0xFF6DB84C),
+                colors.yellow,
+                colors.green,
               ],
             ),
           ),
@@ -37,19 +42,21 @@ class BottomFloatingButton extends StatelessWidget {
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 12,
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.add),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(label),
-                ],
+            child: SizedBox(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(AppAssets.iconAdd),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      label.toUpperCase(),
+                      style: text.button,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
